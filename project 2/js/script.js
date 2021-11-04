@@ -17,70 +17,99 @@ P.S. Здесь есть несколько вариантов решения з
 
 'use strict';
 
-const movieDB = {
-	movies: [
-		"Логан",
-		"Лига справедливости",
-		"Ла-ла лэнд",
-		"Одержимость",
-		"Скотт Пилигрим против..."
-	]
-};
+document.addEventListener('DOMContentLoaded', () => {
 
-const adv = document.querySelectorAll('.promo__adv img'),
-	poster = document.querySelector('.promo__bg'),
-	genre = poster.querySelector('.promo__genre'),
-	movieList = document.querySelector('.promo__interactive-list'),
-	addForm = document.querySelector('form.add'),
-	input = document.querySelector('.adding__input'),
-	checkbox = document.querySelector('[type="checkbox"]');
+	const movieDB = {
+		movies: [
+			"Логан",
+			"Лига справедливости",
+			"Ла-ла лэнд",
+			"Одержимость",
+			"Скотт Пилигрим против..."
+		]
+	};
 
-const deleteAvd = (arr) => {
-	arr.forEach(item => item.remove());
-};
+	const adv = document.querySelectorAll('.promo__adv img'),
+		poster = document.querySelector('.promo__bg'),
+		genre = poster.querySelector('.promo__genre'),
+		movieList = document.querySelector('.promo__interactive-list'),
+		addForm = document.querySelector('form.add'),
+		input = document.querySelector('.adding__input'),
+		checkbox = document.querySelector('[type="checkbox"]');
 
-const makeChanges = () => {
-	genre.textContent = 'ДРАМА';
 
-	poster.style.backgroundImage = 'url("img/bg.jpg")';
-};
 
-const sortArr = (arr) => {
-	arr.sort();
-};
+	const deleteAvd = (arr) => {
+		arr.forEach(item => item.remove());
+	};
 
-function createMovieList(films, parent) {
-	parent.innerHTML = '';
+	const makeChanges = () => {
+		genre.textContent = 'ДРАМА';
 
-	films.forEach((item, index) => {
-		parent.innerHTML += `
-		<li class="promo__interactive-item">${index + 1}. ${item}
-			<div class="delete"></div>
-		</li>
-		`;
-	});
-}
+		poster.style.backgroundImage = 'url("img/bg.jpg")';
+	};
 
-deleteAvd(adv);
-makeChanges();
-sortArr(movieDB.movies);
-createMovieList(movieDB.movies, movieList);
+	const sortArr = (arr) => {
+		arr.sort();
+	};
 
-addForm.addEventListener('submit', (event) => {
+	function createMovieList(films, parent) {
+		parent.innerHTML = '';
 
-	event.preventDefault();
-	let newFilm = input.value;
-	const favorite = checkbox.checked;
+		sortArr(movieDB.movies);
 
-	if (newFilm.length > 21) {
-		newFilm = newFilm.slice(0, 21) + '...';
+		films.forEach((item, index) => {
+			parent.innerHTML += `
+			<li class="promo__interactive-item">${index + 1}. ${item}
+				<div class="delete"></div>
+			</li>
+			`;
+		});
+
+		const deleteMovieList = document.querySelectorAll('.delete');
+
+		deleteMovieList.forEach((btn, index) => {
+
+			btn.addEventListener('click', () => {
+				btn.parentElement.remove();
+				movieDB.movies.splice(index, 1);
+				createMovieList(films, parent);
+
+			});
+
+		});
+
 	}
 
-	movieDB.movies.push(newFilm);
+	deleteAvd(adv);
+	makeChanges();
 	sortArr(movieDB.movies);
-
 	createMovieList(movieDB.movies, movieList);
 
-	event.target.reset();
+	addForm.addEventListener('submit', (event) => {
+
+		event.preventDefault();
+		let newFilm = input.value;
+		const favorite = checkbox.checked;
+
+		if (newFilm) {
+			if (newFilm.length > 21) {
+				newFilm = newFilm.slice(0, 21) + '...';
+			}
+
+			if (favorite) {
+				console.log('Добавляем любимый фильм');
+			}
+
+			movieDB.movies.push(newFilm);
+			createMovieList(movieDB.movies, movieList);
+
+		}
+
+
+
+		event.target.reset();
+
+	});
 
 });
