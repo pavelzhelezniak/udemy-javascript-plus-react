@@ -158,6 +158,18 @@ window.addEventListener('DOMContentLoaded', () => {
 		'.menu .container',
 	).render();
 
+	//Forms
+
+	const forms = document.querySelector('form');
+
+	function postData(form) {
+		form.addEventListener('submit', (e) => {
+			e.preventDefault();
+
+			const request = new XMLHttpRequest();
+			request.open('POST', 'server.php');
+
+		});
+	}
+
 });
-
-
