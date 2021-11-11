@@ -193,6 +193,10 @@ window.addEventListener('DOMContentLoaded', () => {
 				if (request.status === 200) {
 					console.log(request.response);
 					statusMessege.textContent = message.succes; // оповещаем пользователя о том, что все прошло хорошо
+					form.reset();
+					setTimeout(() => {
+						statusMessege.remove();
+					}, 2000);
 				} else {
 					statusMessege.textContent = message.failure;  // оповещаем пользователя о сбое при отправке данных
 				}
