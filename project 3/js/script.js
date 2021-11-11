@@ -162,9 +162,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	const forms = document.querySelectorAll('form');
 
+	const message = {
+		loading: 'Загрузка',
+		succes: 'Спасибо! Скоро мы с вами свяжемся!',
+		failure: 'Что-то пошло не так'
+	};
+
+	forms.forEach(item => {
+		postData(item);
+	});
+
 	function postData(form) {
 		form.addEventListener('submit', (e) => {
 			e.preventDefault();
+
+			const statusMessege = document.createElement('div'); //создаем новый элемент, для вывода его на страницу и оповещения пользователя о статусе происходящего
+			statusMessege.classList.add('status');
+			statusMessege.textContent = message.loading;
+			form.append(statusMessege);									// добавляем этот элемент на страницу
 
 			const request = new XMLHttpRequest();
 			request.open('POST', 'server.php'); // server.php - тот сервер на который мы будем ссылаться
@@ -177,6 +192,9 @@ window.addEventListener('DOMContentLoaded', () => {
 			request.addEventListener('load', () => {
 				if (request.status === 200) {
 					console.log(request.response);
+					statusMessege.textContent = message.succes; // оповещаем пользователя о том, что все прошло хорошо
+				} else {
+					statusMessege.textContent = message.failure;  // оповещаем пользователя о сбое при отправке данных
 				}
 			});
 		});
