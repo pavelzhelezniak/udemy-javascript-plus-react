@@ -211,4 +211,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
+	function showThanksModal() {
+		const prevModalDialog = document.querySelector('.modal__dialog');
+
+	}
 });
