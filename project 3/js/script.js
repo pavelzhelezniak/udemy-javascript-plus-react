@@ -42,7 +42,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	const modalTrigger = document.querySelectorAll('[data-modal]');
 	const modal = document.querySelector('.modal');
-	const modalCloseBtn = document.querySelector('[data-close]');
 
 	function openModal() {
 		modal.classList.add('show');
@@ -61,10 +60,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		document.body.style.overflow = '';
 	}
 
-	modalCloseBtn.addEventListener('click', closeModal);
-
 	modal.addEventListener('click', (e) => {
-		if (e.target === modal) {
+		if (e.target === modal || e.target.getAttribute('data-close') === '') {
 			closeModal();
 		}
 	});
@@ -75,7 +72,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 
-	//const modalTimerId = setTimeout(openModal, 5000);
+	const modalTimerId = setTimeout(openModal, 50000);
 
 	function showModalByScroll() {
 		if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
@@ -164,7 +161,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	const message = {
 		loading: 'Загрузка',
-		succes: 'Спасибо! Скоро мы с вами свяжемся!',
+		success: 'Спасибо! Скоро мы с вами свяжемся!',
 		failure: 'Что-то пошло не так'
 	};
 
@@ -176,15 +173,15 @@ window.addEventListener('DOMContentLoaded', () => {
 		form.addEventListener('submit', (e) => {
 			e.preventDefault();
 
-			const statusMessege = document.createElement('div'); //создаем новый элемент, для вывода его на страницу и оповещения пользователя о статусе происходящего
+			let statusMessege = document.createElement('div'); //создаем новый элемент, для вывода его на страницу и оповещения пользователя о статусе происходящего
 			statusMessege.classList.add('status');
 			statusMessege.textContent = message.loading;
-			form.append(statusMessege);									// добавляем этот элемент на страницу
+			form.appendChild(statusMessege);									// добавляем этот элемент на страницу
 
 			const request = new XMLHttpRequest();
 			request.open('POST', 'server.php'); // server.php - тот сервер на который мы будем ссылаться
 
-			request.setRequestHeader('Content-type', 'aplication/json');
+			request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 			const formData = new FormData(form);
 
 			const object = {};
@@ -199,20 +196,37 @@ window.addEventListener('DOMContentLoaded', () => {
 			request.addEventListener('load', () => {
 				if (request.status === 200) {
 					console.log(request.response);
-					statusMessege.textContent = message.succes; // оповещаем пользователя о том, что все прошло хорошо
+					showThanksModal(message.success); // оповещаем пользователя о том, что все прошло хорошо
+					statusMessege.remove();
 					form.reset();
-					setTimeout(() => {
-						statusMessege.remove();
-					}, 2000);
 				} else {
-					statusMessege.textContent = message.failure;  // оповещаем пользователя о сбое при отправке данных
+					showThanksModal(message.failure);  // оповещаем пользователя о сбое при отправке данных
 				}
 			});
 		});
 	}
 
-	function showThanksModal() {
+	function showThanksModal(message) {
 		const prevModalDialog = document.querySelector('.modal__dialog');
 
+		prevModalDialog.classList.add('hide');
+		openModal();
+
+		const thanksModal = document.createElement('div');
+		thanksModal.classList.add('modal__dialog');
+		thanksModal.innerHTML = `
+		<div class="modal__content">
+			<div class="modal__close" data-close>&times;</div>
+			<div class="modal__title">${message}</div>
+		</div>
+		`;
+
+		document.querySelector('.modal').append(thanksModal);
+		setTimeout(() => {
+			thanksModal.remove();
+			prevModalDialog.classList.add('show');
+			prevModalDialog.classList.remove('hide');
+			closeModal();
+		}, 4000);
 	}
 });
