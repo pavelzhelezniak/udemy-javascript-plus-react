@@ -160,7 +160,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const forms = document.querySelectorAll('form');
 
 	const message = {
-		loading: 'Загрузка',
+		loading: 'img/form/spinner.svg',
 		success: 'Спасибо! Скоро мы с вами свяжемся!',
 		failure: 'Что-то пошло не так'
 	};
@@ -173,10 +173,13 @@ window.addEventListener('DOMContentLoaded', () => {
 		form.addEventListener('submit', (e) => {
 			e.preventDefault();
 
-			let statusMessege = document.createElement('div'); //создаем новый элемент, для вывода его на страницу и оповещения пользователя о статусе происходящего
-			statusMessege.classList.add('status');
-			statusMessege.textContent = message.loading;
-			form.appendChild(statusMessege);									// добавляем этот элемент на страницу
+			let statusMessege = document.createElement('img'); //создаем новый элемент, для вывода его на страницу и оповещения пользователя о статусе происходящего
+			statusMessege.src = message.loading;
+			statusMessege.style.cssText = `
+				display: block;
+				margin: 0 auto;
+			`;
+			form.insertAdjacentElement('afterend', statusMessege);									// добавляем этот элемент на страницу
 
 			const request = new XMLHttpRequest();
 			request.open('POST', 'server.php'); // server.php - тот сервер на который мы будем ссылаться
