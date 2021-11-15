@@ -272,5 +272,16 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 
+	function plusSlides(n) {
+		showSlides(slideIndex += n);
+	}
+
+	slidePrev.addEventListener('click', () => {
+		plusSlides(-1);
+	});
+
+	slideNext.addEventListener('click', () => {
+		plusSlides(1);
+	});
 
 });
