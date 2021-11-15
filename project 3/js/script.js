@@ -233,4 +233,12 @@ window.addEventListener('DOMContentLoaded', () => {
 			closeModal();
 		}, 4000);
 	}
+
+	// Slider
+
+	const slides = document.querySelectorAll('.offer__slide');
+	const slidePrev = document.querySelectorAll('.offer__slider-prev');
+	const slideNext = document.querySelectorAll('.offer__slide-next');
+
+
 });
