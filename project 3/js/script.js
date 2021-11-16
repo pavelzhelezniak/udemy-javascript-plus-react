@@ -285,4 +285,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		plusSlides(1);
 	});
 
+	fetch('http://localhost:3000/menu')
+		.then(data => data.json()) // берем ответ от сервера и превращаем его в обычный JS-объект
+		.then(res => console.log(res)); // берем наш объект и выводим его в консоль
+
 });
