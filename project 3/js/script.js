@@ -166,10 +166,22 @@ window.addEventListener('DOMContentLoaded', () => {
 	};
 
 	forms.forEach(item => {
-		postData(item);
+		bindPostData(item);
 	});
 
-	function postData(form) {
+	const postData = async (url, data) => {
+		const res = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json'
+			},
+			body: data
+		});
+
+		return await res.json();
+	};
+
+	function bindPostData(form) {
 		form.addEventListener('submit', (e) => {
 			e.preventDefault();
 
@@ -183,21 +195,19 @@ window.addEventListener('DOMContentLoaded', () => {
 
 			const formData = new FormData(form);
 
-			const object = {};
+			/* const object = {};
 			formData.forEach(function (value, key) {
 				object[key] = value;
-			});
+			}); */
 
-			const json = JSON.stringify(object);
+			/* Берем formData, которая собрала все введенные в форму данные
+				Превращаем ёё в массив мвссивов при помощи метода entries()
+				Затем массив массиво первращаем в классический объект при помощи метода Object.fromEntries()
+				А уже затем этот объект превращаем в JSON
+			*/
+			const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-			fetch('server.php', {
-				method: 'POST',
-				headers: {
-					'Content-type': 'application/json'
-				},
-				body: json
-			})
-				.then(data => data.text())
+			postData('http://localhost:3000/requests', json)
 				.then(data => {
 					console.log(data);
 					showThanksModal(message.success); // оповещаем пользователя о том, что все прошло хорошо
@@ -285,7 +295,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		plusSlides(1);
 	});
 
-	fetch('http://localhost:3000/requests')
+	fetch('http://localhost:3000/menu ')
 		.then(data => data.json()) // берем ответ от сервера и превращаем его в обычный JS-объект
 		.then(res => console.log(res)); // берем наш объект и выводим его в консоль
 
