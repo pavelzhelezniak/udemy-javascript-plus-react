@@ -268,6 +268,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const width = window.getComputedStyle(slidesWrapper).width;
 
 	let slideIndex = 1;
+	let offset = 0;
 
 	// Slider I
 
@@ -313,6 +314,40 @@ window.addEventListener('DOMContentLoaded', () => {
 		}); */
 
 	// Slider II
+
+	slidesField.style.width = 100 * slides.length + '%';
+	slidesField.style.display = 'flex';
+	slidesField.style.transition = '0.5s all';
+
+	slidesWrapper.style.overflow = 'hidden';
+
+	slides.forEach(slide => {
+		slide.style.width = width;
+	});
+
+	slideNext.addEventListener('click', () => {
+		if (offset === parseInt(width, 10) * (slides.length - 1)) {
+			offset = 0;
+		} else {
+			offset += parseInt(width, 10);
+		}
+
+		slidesField.style.transform = `translate(-${offset}px)`;
+
+	});
+
+	slidePrev.addEventListener('click', () => {
+		if (offset === 0) {
+			offset = parseInt(width, 10) * (slides.length - 1);
+		} else {
+			offset -= parseInt(width, 10);
+		}
+
+		slidesField.style.transform = `translate(-${offset}px)`;
+
+	});
+
+
 
 	fetch('http://localhost:3000/menu ')
 		.then(data => data.json()) // берем ответ от сервера и превращаем его в обычный JS-объект
