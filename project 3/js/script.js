@@ -338,6 +338,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	slider.style.position = 'relative';
 
 	const indicators = document.createElement('ol');
+	const dots = [];
 	indicators.classList.add('carousel-indicators');
 	indicators.style.cssText = `
 		position: absolute;
@@ -371,7 +372,11 @@ window.addEventListener('DOMContentLoaded', () => {
 			opacity: .5;
 			transition: opacity .6s ease;
 	`;
+		if (i === 0) {
+			dot.style.opacity = 1;
+		}
 		indicators.append(dot);
+		dots.push(dot);
 	}
 
 	slideNext.addEventListener('click', () => {
@@ -395,6 +400,10 @@ window.addEventListener('DOMContentLoaded', () => {
 			current.textContent = slideIndex;
 		}
 
+		dots.forEach(dot => {
+			dot.style.opacity = .5;
+			dots[slideIndex - 1].style.opacity = 1;
+		});
 	});
 
 	slidePrev.addEventListener('click', () => {
@@ -418,6 +427,10 @@ window.addEventListener('DOMContentLoaded', () => {
 			current.textContent = slideIndex;
 		}
 
+		dots.forEach(dot => {
+			dot.style.opacity = .5;
+			dots[slideIndex - 1].style.opacity = 1;
+		});
 	});
 
 
