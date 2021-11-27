@@ -427,8 +427,27 @@ window.addEventListener('DOMContentLoaded', () => {
 			current.textContent = slideIndex;
 		}
 
-		dots.forEach(dot => {
-			dot.style.opacity = .5;
+		dots.forEach(dot => dot.style.opacity = '.5');
+		dots[slideIndex - 1].style.opacity = 1;
+
+	});
+
+	dots.forEach(dot => {
+		dot.addEventListener('click', (e) => {
+			const slideTo = e.target.getAttribute('data-slide-to');
+
+			slideIndex = slideTo;
+			offset = parseInt(width, 10) * (slideTo - 1);
+
+			slidesField.style.transform = `translate(-${offset}px)`;
+
+			if (slides.length < 10) {
+				current.textContent = `0${slideIndex}`;
+			} else {
+				current.textContent = slideIndex;
+			}
+
+			dots.forEach(dot => dot.style.opacity = '.5');
 			dots[slideIndex - 1].style.opacity = 1;
 		});
 	});
