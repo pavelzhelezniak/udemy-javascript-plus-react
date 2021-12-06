@@ -469,6 +469,30 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 	calcTotal();
 
+	function getStaticInformstion(parentSelector, activeClass) {
+		const elements = document.querySelectorAll(`${parentSelector} div`);
+
+		document.querySelector(parentSelector).addEventListener('click', (e) => {
+			if (e.target.getAttribute('data-ratio')) {
+				ratio = +e.target.getAttribute('data-ratio');
+			} else {
+				sex = e.target.getAttribute('id');
+			}
+			console.log(ratio, sex);
+
+			elements.forEach(elem => {
+				elem.classList.remove(activeClass);
+			});
+
+			e.target.classList.add(activeClass);
+		});
+	}
+
+	getStaticInformstion('#gender', 'calculating__choose-item_active');
+	getStaticInformstion('.calculating__choose_big', 'calculating__choose-item_active');
+
+
+
 	fetch('http://localhost:3000/menu ')
 		.then(data => data.json()) // берем ответ от сервера и превращаем его в обычный JS-объект
 		.then(res => console.log(res)); // берем наш объект и выводим его в консоль
